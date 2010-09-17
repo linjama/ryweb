@@ -1,0 +1,35 @@
+<div class="table-header"><div class="table-header r"><div class="table-header m"><h2>Luettelo tilanvarauksista</h2></div></div></div>
+<div class="border">
+
+<table>
+  <tr>
+    <th>p&auml;iv&auml;ys</th>
+    <th>viikko</th>        
+    <th>kesto / h</th>
+    <th>varatut tilat</th>
+    <th>varaaja</th>
+    <th>puhelin</th>
+  </tr>
+
+<% @bookings.each do |booking| %>
+  <tr>
+    <% a=%w[su ma ti ke to pe la] %>
+    <% j=booking.start_time.strftime('%w').to_i %>
+    <td><%=h booking.start_time.strftime(" %d.%m.%Y %H:%M ")+a[j] %></td>
+    <td align="center"><%=h booking.week %></td>
+    <% aika=(booking.end_time-booking.start_time)/60/60 %>
+    <td align="center"><%=h sprintf('%.1f', aika) %></td>
+    <td><%=h booking.description %></td>    
+    <td><%=h booking.reserver %></td>
+    <td><%=h booking.telephone %></td>
+    <td><%= link_to 'Muokkaa', edit_booking_path(:id => booking) %></td>
+    <td><%= link_to 'Poista', bookings_path(:id => booking), :confirm => 'Oletko varma ?', :method => :delete %></td> 
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'Uusi tilanvaraus', new_booking_path %>
+
+</div>
