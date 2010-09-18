@@ -1,5 +1,5 @@
 ActionController::Routing::Routes.draw do |map|
-
+  map.resources :messages, :path_prefix => '/:customer'
   map.resources :bookings, :path_prefix => '/:customer'
   map.resources :rooms, :path_prefix => '/:customer'
 
