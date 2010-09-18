@@ -4,6 +4,8 @@ class UsersController < ApplicationController
   def index
     @user = self.current_user
 
+		@messages = Message.find(:all, :conditions => ["valid_from < ? AND valid_until > ?", Time.now, Time.now], :order => "valid_from DESC")
+
     # Näytetään etusivulla käyttäjän lähettämät palautteet
     if current_user.superuser?
      @feedbacks = Feedback.find(:all, :order => "created_at DESC")
