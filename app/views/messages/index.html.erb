@@ -1,0 +1,33 @@
+<div class="table-header"><div class="table-header r"><div class="table-header m"><h2>Tiedotteet</h2></div></div></div>
+<div class="border">
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Content</th>
+    <th>Customer</th>
+    <th>Public</th>
+    <th>Valid from</th>
+    <th>Valid until</th>
+  </tr>
+
+<% @messages.each do |message| %>
+  <tr>
+    <td><%=h message.name %></td>
+    <td><%=h message.content %></td>
+    <td><%=h message.customer_id %></td>
+    <td><%=h message.public %></td>
+    <td><%=h message.valid_from %></td>
+    <td><%=h message.valid_until %></td>
+    <td><%= link_to 'Show', messages_path(:id => message) %></td>
+    <td><%= link_to 'Edit', edit_message_path(:id => message) %></td>
+    <td><%= link_to 'Destroy', messages_path(:id => message), :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New message', new_message_path %>
+
+</div>

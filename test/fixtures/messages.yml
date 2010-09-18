@@ -1,0 +1,17 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  name: MyString
+  content: MyText
+  customer_id: 1
+  public: false
+  valid_from: 2010-09-18 14:02:56
+  valid_until: 2010-09-18 14:02:56
+
+two:
+  name: MyString
+  content: MyText
+  customer_id: 1
+  public: false
+  valid_from: 2010-09-18 14:02:56
+  valid_until: 2010-09-18 14:02:56
