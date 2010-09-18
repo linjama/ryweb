@@ -7,27 +7,27 @@
   <%= f.error_messages %>
 
   <p>
-    <%= f.label :name %><br />
+    <%= f.label :name, 'Otsikko' %><br />
     <%= f.text_field :name %>
   </p>
   <p>
-    <%= f.label :content %><br />
+    <%= f.label :content, 'Teksti' %><br />
     <%= f.text_area :content %>
   </p>
   <p>
-    <%= f.label :public %><br />
+    <%= f.label :public, 'Julkinen' %><br />
     <%= f.check_box :public %>
   </p>
   <p>
-    <%= f.label :valid_from %><br />
+    <%= f.label :valid_from, 'Julkaistaan' %><br />
     <%= f.datetime_select :valid_from %>
   </p>
   <p>
-    <%= f.label :valid_until %><br />
+    <%= f.label :valid_until, 'Poistuu' %><br />
     <%= f.datetime_select :valid_until %>
   </p>
   <p>
-    <%= f.submit 'Update' %>
+    <%= f.submit 'Tallenna' %>
   </p>
 <% end %>
 
