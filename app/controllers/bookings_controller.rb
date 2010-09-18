@@ -4,8 +4,7 @@ class BookingsController < ApplicationController
   # GET /bookings
   # GET /bookings.xml
   def index
-    @bookings = Booking.find(:all)
-    #, :conditions => ['end_time > ?', Time.now])
+    @bookings = Booking.find(:all, :conditions => ['end_time > ?', Time.now])
 
     respond_to do |format|
       format.html # index.html.erb
@@ -56,7 +55,6 @@ class BookingsController < ApplicationController
 
     respond_to do |format|
       if @booking.save
-        @booking.update_attribute(:customer_id,current_user.customer_id)
         flash[:notice] = 'Uusi tilanvaraus lisätty.'
         format.html { redirect_to(booking_url(:id => @booking)) }
         format.xml  { render :xml => @booking, :status => :created, :booking => @booking }
