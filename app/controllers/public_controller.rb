@@ -41,16 +41,16 @@ class PublicController < ApplicationController
     last_date = date_now.advance(:months => calendar_length)
     last_date = last_date.beginning_of_month # first day of next month at 0:00:00
     
-<<<<<<< HEAD:app/controllers/public_controller.rb
+
     # Database access only if page contains a calendar
     if @page.page_type == 2
-=======
+
       date_now = DateTime.now
       first_date = date_now.beginning_of_month # first day at 0:00:00
       last_date = date_now.advance(:months => calendar_length)
       last_date = last_date.beginning_of_month # first day of next month at 0:00:00
 	@messages = Message.find(:all, :conditions => ["public = 't' AND valid_from < ? AND valid_until > ?", Time.now, Time.now], :order => "valid_from DESC")
->>>>>>> 8fdbd410ffa23953e8f2a6bc8522c898a516631c:app/controllers/public_controller.rb
+
 
       @modified_occasions = Occasion.find(:all, :joins => :occasion_type, :conditions => ["start_time >= ? AND start_time < ? AND (state = ? OR state =?) AND occasion_types.visibility = ? AND inform_changes = ? ", Time.now.beginning_of_day, last_date, 20,30, 20, true], :order => 'start_time ')
 
