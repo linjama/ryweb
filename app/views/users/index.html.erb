@@ -26,6 +26,21 @@
   </tbody>
 </table>
 <% end %>
+
+<%= render :partial => 'messages/display' %>
+<% unless @messages.blank? %>
+<div class="tiedotteet">
+<h3>Tiedotteet:</h3>
+      <% for message in @messages %>
+				<h4><%= message.name %></h4>
+        <p>
+				<span>Julkaistu: <%= localize message.valid_from, :format => :short %><span><br />
+				<%= message.content %>
+				</p>    
+      <% end %>
+</div>
+<% end %>
+
 <% unless @feedbacks.blank? %>
 <h3>Omat palautteet</h3>
 <table>
