@@ -5,8 +5,8 @@ class BookingsController < ApplicationController
   # GET /bookings.xml
   def index
     @bookings = Booking.find(:all, :conditions => ['end_time > ?', Time.now])
-
-    respond_to do |format|
+		
+		respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @bookings }
     end
@@ -49,8 +49,8 @@ class BookingsController < ApplicationController
 # TODO: Suomalainen viikko menee eri tavalla kuin yllä laskettu amerikkalainen viikko
 # tämä hoidetaan erillisellä funktiolla
 
-    @minutes = params[:duration].to_i
-	 @booking.end_time = @booking.start_time + @minutes.minutes
+  #  @minutes = params[:duration].to_i
+	# @booking.end_time = @booking.start_time + @minutes.minutes
 # TODO: ylläoleva täytyy tarkistaa
 
     respond_to do |format|
