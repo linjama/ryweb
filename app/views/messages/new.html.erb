@@ -5,30 +5,33 @@
   <%= f.error_messages %>
 
   <p>
-    <%= f.label :name %><br />
+    <%= f.label :name, 'Otsikko' %><br />
     <%= f.text_field :name %>
   </p>
   <p>
-    <%= f.label :content %><br />
+    <%= f.label :content, 'Teksti' %><br />
     <%= f.text_area :content %>
   </p>
   <p>
-    <%= f.label :public %><br />
+    <%= f.label :public, 'Julkinen' %><br />
     <%= f.check_box :public %>
   </p>
   <p>
-    <%= f.label :valid_from %><br />
-    <%= f.datetime_select :valid_from %>
+    <%= f.label :valid_from, 'Julkaistaan' %><br />
+    
+		<%= f.datetime_select :valid_from %>
   </p>
   <p>
-    <%= f.label :valid_until %><br />
-    <%= f.datetime_select :valid_until %>
+    <%= f.label :valid_until, 'Poistuu' %><br />
+    <%= f.datetime_select :valid_until,
+        :default => DateTime.tomorrow
+    %>
   </p>
   <p>
-    <%= f.submit 'Create' %>
+    <%= f.submit 'Luo' %>
   </p>
 <% end %>
 
-<%= link_to 'Back', messages_path(:id => @message) %>
+<%= link_to 'Takaisin', messages_path(:id => @message) %>
 
 </div>

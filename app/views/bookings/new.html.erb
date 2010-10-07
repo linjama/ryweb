@@ -34,7 +34,7 @@
     <% status = ["varattu", "peruttu"] %>             
     <ul>
       <% for room in Room.find(:all) %>
-        <li><%= check_box_tag "booking[room_ids][]",room.id,@booking.rooms.include?(room)-%> <%= room.name -%></li>
+        <li><%= check_box_tag "booking[room_ids][]",room.id,@booking.rooms.include?(room)-%> <%= room.name -%> (<%= room.description -%>)</li>
       <% end %>
     </ul>
   </p>
