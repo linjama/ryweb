@@ -4,7 +4,8 @@ class MessagesController < ApplicationController
   # GET /messages
   # GET /messages.xml
   def index
-    @messages = Message.find(:all)#, :conditions => ['valid_until > ?', Time.now])
+
+    @messages = Message.find(:all)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -27,12 +28,17 @@ class MessagesController < ApplicationController
   # GET /messages/new.xml
   def new
     @message = Message.new
-
+	
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @message }
-    end
-  end
+       
+      end
+     
+    
+     end
+
+    
 
   # GET /messages/1/edit
   def edit
@@ -46,9 +52,26 @@ class MessagesController < ApplicationController
 
     respond_to do |format|
       if @message.save
-        flash[:notice] = 'Message was successfully created.'
+        flash[:notice] = 'Viesti luotu.'
+	if @message.receivers == 1
+		@Users = User.find(:all, :conditions => ["user_level != ?", 10])
+		@recipients = Array.new
+		     
+		@Users.each do|user|
+		  @recipients.push(user.email)
+		end
+		      
+		Emailer.deliver_contact(@recipients, 'RY_Tiedotus',
+					@message.name,
+					@message.valid_from,
+					@message.content )
+		return if request.xhr?
+		flash[:notice] = 'Sähköposti lähetetty osoitteisiin<br />'+@recipients.inspect
+	end
+
         format.html { redirect_to(messages_url) }
         format.xml  { render :xml => @message, :status => :created, :location => @message }
+
       else
         format.html { render :action => "new" }
         format.xml  { render :xml => @message.errors, :status => :unprocessable_entity }
@@ -63,7 +86,25 @@ class MessagesController < ApplicationController
 
     respond_to do |format|
       if @message.update_attributes(params[:message])
-        flash[:notice] = 'Message was successfully updated.'
+        flash[:notice] = 'Viesti luotu.'
+
+	if @message.receivers == 1
+		#@Users = User.find(:all)
+		@Users = User.find(:all, :conditions => ["user_level != ?", 10])
+		@recipients = Array.new
+		     
+		@Users.each do|user|
+		  @recipients.push(user.email)
+		end
+		      
+		Emailer.deliver_contact(@recipients, 'RY_Tiedotus_Muutos',
+					@message.name,
+					@message.valid_from,
+					@message.content )
+		return if request.xhr?
+		flash[:notice] = 'Sähköposti lähetetty osoitteisiin<br />'+@recipients.inspect
+	end
+
         format.html { redirect_to(messages_url) }
         format.xml  { head :ok }
       else
@@ -76,7 +117,7 @@ class MessagesController < ApplicationController
   # DELETE /messages/1
   # DELETE /messages/1.xml
   def destroy
-    @message = Message.find(params[:id])
+    @message= Message.find(params[:id])
     @message.destroy
 
     respond_to do |format|

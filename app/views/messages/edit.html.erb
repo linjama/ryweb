@@ -2,7 +2,7 @@
 <div class="border">
 
 <% form_for :message,
-   :url => messages_path(:id => @message),
+   :url => message_path(:id => @message),
    :html => {:method => :put }  do |f| -%>
   <%= f.error_messages %>
 
@@ -25,6 +25,10 @@
   <p>
     <%= f.label :valid_until, 'Poistuu' %><br />
     <%= f.datetime_select :valid_until %>
+  </p>
+  <p>
+    <%= f.label :receivers, 'Lähetä sähköposti?' %><br />
+    <%= f.check_box :receivers %>
   </p>
   <p>
     <%= f.submit 'Tallenna' %>

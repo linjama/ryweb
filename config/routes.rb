@@ -7,7 +7,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :ui_templates, :path_prefix => '/:customer_key'
   map.resources :configurations, :path_prefix => '/:customer_key'
 
-  map.resources :messages, :path_prefix => '/:customer'
+  map.resources :messages, :path_prefix => '/:customer_key'
   map.resources :bookings, :path_prefix => '/:customer'
   map.resources :rooms, :path_prefix => '/:customer'
 
