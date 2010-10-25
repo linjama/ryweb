@@ -7,6 +7,7 @@ class CreateMessages < ActiveRecord::Migration
       t.boolean :public
       t.datetime :valid_from
       t.datetime :valid_until
+      t.integer :receivers
 
       t.timestamps
     end
