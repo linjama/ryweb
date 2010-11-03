@@ -32,11 +32,13 @@
   <p>
     <%= f.label :tilat %><br />
     <% status = ["varattu", "peruttu"] %>             
-    <ul>
+    
       <% for room in Room.find(:all) %>
-        <li><%= check_box_tag "booking[room_ids][]",room.id,@booking.rooms.include?(room)-%> <%= room.name -%> (<%= room.description -%>)</li>
+        <div>
+
+<%= check_box_tag "booking[room_ids][]",room.id,@booking.rooms.include?(room)-%> <%= room.name -%> (<%= room.description -%>)</div>
       <% end %>
-    </ul>
+    
   </p>
  
   <p>
@@ -54,5 +56,5 @@
   </p>
 <% end %>
 
-<%= link_to 'Takaisin varauslistaan', bookings_path(:id => @booking) %>
+<%= link_to 'Takaisin varauslistaan', bookings_path %>
 </div>

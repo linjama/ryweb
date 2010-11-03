@@ -1,7 +1,7 @@
 <div class="table-header"><div class="table-header r"><div class="table-header m"><h2>Tilavarauksen muokkaaminen</h2></div></div></div>
 <div class="border">
 <% form_for :booking,
-   :url => bookings_path(:id => @booking),
+   :url => booking_path(:id => @booking),
    :html => {:method => :put }  do |f| -%>
    
    <%= f.error_messages %>

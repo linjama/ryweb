@@ -17,9 +17,8 @@
 
     <td><%=h room.description %></td>
 
-    <td><%= link_to 'N&auml;yt&auml;', rooms_path(:id => room) %></td>
-    <td><%= link_to 'Muokkaa', edit_room_path(:id => room) %></td>
-    <td><%= link_to 'Poista', rooms_path(:id => room), :confirm => 'Oletko varma?', :method => :delete %></td>
+    <td><%= link_to 'Muokkaa', edit_room_path(:id => room) %>
+<%= link_to 'Poista', room_path(:id => room), :confirm => 'Oletko varma?', :method => :delete %></td>
   </tr>
 <% end %>
 </table>
@@ -27,5 +26,6 @@
 <br />
 
 <%= link_to 'Uusi tila', new_room_path %>
+<%= link_to 'Näytä tilanvaraukset', bookings_path %>
 
 </div>

@@ -61,15 +61,17 @@ class RoomsController < ApplicationController
 
     respond_to do |format|
       if @room.update_attributes(params[:room])
-        flash[:notice] = 'Tilan tietoja muokattu.'
-        format.html { redirect_to(rooms_url(:id => @room)) }
+        flash[:notice] = 'Tilaa muokattu.'
+        format.html { redirect_to(rooms_url) }
         format.xml  { head :ok }
       else
+				flash[:notice] = 'Tilaa ei voitu muokata.'
         format.html { render :action => "edit" }
         format.xml  { render :xml => @room.errors, :status => :unprocessable_entity }
       end
     end
   end
+
 
   # DELETE /rooms/1
   # DELETE /rooms/1.xml
@@ -78,7 +80,7 @@ class RoomsController < ApplicationController
     @room.destroy     
 
     respond_to do |format|
-      format.html { redirect_to(rooms_url(:id => @room)) }
+      format.html { redirect_to(rooms_url) }
       format.xml  { head :ok }
     end
   end
