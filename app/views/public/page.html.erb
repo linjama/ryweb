@@ -1,5 +1,12 @@
 <%= @page.content %>
 
 <% if @page.calendar? %>
-<%= public_calendar(@page) %>
+
+  <%= render :partial => 'modified_occasions' %>
+
+    <% if @page.parameter_calendar_type == 'kk' %>
+      <%= render :partial => 'month_view' %>
+    <% else %>
+      <%= render :partial => 'week_view' %>
+    <% end %>
 <% end %>

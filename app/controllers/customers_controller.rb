@@ -1,8 +1,10 @@
 class CustomersController < ApplicationController
+  filter_resource_access
+  
   # GET /customers
   # GET /customers.xml
   def index
-    @customers = Customer.find(:all)
+    @customers = Customer.with_permissions_to(:index).find(:all)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -13,7 +15,9 @@ class CustomersController < ApplicationController
   # GET /customers/1
   # GET /customers/1.xml
   def show
-    @customer = Customer.find(params[:id])
+    @customer = Customer.with_permissions_to(:show).find(params[:id])
+
+    @customer.ui_template = UiTemplate.new unless @customer.ui_template
 
     respond_to do |format|
       format.html # show.html.erb
@@ -25,6 +29,8 @@ class CustomersController < ApplicationController
   # GET /customers/new.xml
   def new
     @customer = Customer.new
+    @ui_templates = UiTemplate.find(:all)
+    @customer.ui_template = UiTemplate.new unless @customer.ui_template
 
     respond_to do |format|
       format.html # new.html.erb
@@ -34,13 +40,14 @@ class CustomersController < ApplicationController
 
   # GET /customers/1/edit
   def edit
-    @customer = Customer.find(params[:id])
+    @customer = Customer.with_permissions_to(:edit).find(params[:id])
+    @ui_templates = UiTemplate.find(:all)
   end
 
   # POST /customers
   # POST /customers.xml
   def create
-    @customer = Customer.new(params[:new_customer])
+    @customer = Customer.new(params[:customer])
 
     respond_to do |format|
       if @customer.save
@@ -48,6 +55,8 @@ class CustomersController < ApplicationController
         format.html { redirect_to(customer_url(:id => @customer)) }        
         format.xml  { render :xml => @customer, :status => :created, :location => @customer }
       else
+        @ui_templates = UiTemplate.find(:all)
+        flash[:error] = 'Uuden yhdistyksen lisäys epäonnistui.'
         format.html { render :action => "new" }
         format.xml  { render :xml => @customer.errors, :status => :unprocessable_entity }
       end
@@ -57,13 +66,12 @@ class CustomersController < ApplicationController
   # PUT /customers/1
   # PUT /customers/1.xml
   def update
-    @customer = Customer.find(params[:id])
+    @customer = Customer.with_permissions_to(:update).find(params[:id])
 
     respond_to do |format|
-      if @customer.update_attributes(params[:edit_customer])
+      if @customer.update_attributes(params[:customer])
         flash[:notice] = 'Yhdistyksen tiedot päivitetty.'
         format.html { redirect_to(customer_url) }        
-#        format.html { redirect_to(@customer) }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
@@ -75,7 +83,7 @@ class CustomersController < ApplicationController
   # DELETE /customers/1
   # DELETE /customers/1.xml
   def destroy
-    @customer = Customer.find(params[:id])
+    @customer = Customer.with_permissions_to(:destroy).find(params[:id])
     @customer.destroy
 
     respond_to do |format|

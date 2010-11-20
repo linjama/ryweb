@@ -63,7 +63,9 @@ module CalendarHelper
   # An additional 'weekend' class is applied to weekend days. 
   #
   # For consistency with the themes provided in the calendar_styles generator, use "specialDay" as the CSS class for marked days.
-  # 
+  #
+
+  #$month_names = ["","Tammikuu","Helmikuu","Maaliskuu","Huhtikuu","Toukokuu","Kesäkuu","Heinäkuu","Elokuu","Syyskuu","Lokakuu","Marraskuu","Joulukuu"]
   def calendar(options = {}, &block)
     raise(ArgumentError, "No year given")  unless options.has_key?(:year)
     raise(ArgumentError, "No month given") unless options.has_key?(:month)
@@ -83,6 +85,7 @@ module CalendarHelper
       :previous_month_text => nil,
       :next_month_text => nil
     }
+    $holName = ""
     options = defaults.merge options
 
     first = Date.civil(options[:year], options[:month], 1)
@@ -93,24 +96,17 @@ module CalendarHelper
     
 #    day_names = Date::DAYNAMES.dup
     day_names = ["Sunnuntai","Maanantai","Tiistai","Keskiviikko","Torstai","Perjantai","Lauantai"]
-    month_names = ["","Tammikuu","Helmikuu","Maaliskuu","Huhtikuu","Toukokuu","Kesäkuu","Heinäkuu","Elokuu","Syyskuu","Lokakuu","Marraskuu","Joulukuu"]    
+    month_names = ["","Tammikuu","Helmikuu","Maaliskuu","Huhtikuu","Toukokuu","Kesäkuu","Heinäkuu","Elokuu","Syyskuu","Lokakuu","Marraskuu","Joulukuu"]
     first_weekday.times do
       day_names.push(day_names.shift)
     end
 
     # TODO Use some kind of builder instead of straight HTML
     cal = %(<table class="#{options[:table_class]}" border="0" cellspacing="0" cellpadding="0">)
-    cal << %(<thead><tr>)
-    if options[:previous_month_text] or options[:next_month_text]
-      cal << %(<th colspan="2">#{options[:previous_month_text]}</th>)
-      colspan=3
-    else
-      colspan=7
-    end
-#    cal << %(<th colspan="#{colspan}" class="#{options[:month_name_class]}">"#{Date::MONTHNAMES[options[:month]]}"</th>)
-    cal << %(<th colspan="#{colspan}" class="#{options[:month_name_class]}">#{month_names[options[:month]]}</th>)
-    cal << %(<th colspan="2">#{options[:next_month_text]}</th>) if options[:next_month_text]
-    cal << %(</tr><tr class="#{options[:day_name_class]}">)
+    cal << %(<thead>)
+    cal << %(<tr class="#{options[:day_name_class]}">)
+    cal << %(<th scope='col' class="week_number"></th>)    # Add empty cell for before day names (MaLi)
+       
     day_names.each do |d|
       unless d[options[:abbrev]].eql? d
         cal << "<th scope='col'><abbr title='#{d}'>#{d[options[:abbrev]]}</abbr></th>"
@@ -119,6 +115,7 @@ module CalendarHelper
       end
     end
     cal << "</tr></thead><tbody><tr>"
+    cal << %(<td scope='col' class="week_number">)+week_number(beginning_of_week(first,first_weekday))+"</td>" unless first.wday == first_weekday  # Week number for the first week (MaLi)
     beginning_of_week(first, first_weekday).upto(first - 1) do |d|
       cal << %(<td class="#{options[:other_month_class]})
       cal << " weekendDay" if weekend?(d)
@@ -134,8 +131,12 @@ module CalendarHelper
       cell_attrs ||= {}
       cell_attrs[:class] ||= options[:day_class]
       cell_attrs[:class] += " weekendDay" if [0, 6].include?(cur.wday) 
+      testD = Date.civil(cur.year, cur.month, cur.mday)
+      hol_str = holiday(testD)
+      cell_attrs[:class] += " specialDay" if hol_str != ""
       cell_attrs[:class] += " today" if (cur == Date.today) and options[:show_today]  
       cell_attrs = cell_attrs.map {|k, v| %(#{k}="#{v}") }.join(" ")
+      cal << %(<td scope='col' class="week_number">)+week_number(cur)+"</td>" if cur.wday == first_weekday     # Week number of other weeks (MaLi)
       cal << "<td #{cell_attrs}>#{cell_text}</td>"
       cal << "</tr><tr>" if cur.wday == last_weekday
     end
@@ -149,6 +150,53 @@ module CalendarHelper
       end
     end unless last.wday == last_weekday
     cal << "</tr></tbody></table>"
+  end
+
+  def navigation_back(args)
+     month_names = ["","Tammikuu","Helmikuu","Maaliskuu","Huhtikuu","Toukokuu","Kesäkuu","Heinäkuu","Elokuu","Syyskuu","Lokakuu","Marraskuu","Joulukuu"]
+    ret = ""
+    3.downto(1) { |i|
+      if @date.month - i < 1
+        previous_month = @date.month - i + 12
+      else
+        previous_month = @date.month - i
+      end
+
+      if @date.month - i < 0
+       this_month = @date.month + 13 - i
+       previous_year = -1
+      else
+        this_month = @date.month-(i-1)
+        previous_year = 0
+      end
+      ret += "<li>#{link_to "&laquo;&laquo;&nbsp;" + month_names[previous_month], :controller => 'occasions', :action => args[:view], :direction => 'back', :year => @date.year+previous_year, :month => this_month}</li>"
+
+    }
+  return ret
+  end
+
+  def navigation_forward(args)
+    month_names = ["","Tammikuu","Helmikuu","Maaliskuu","Huhtikuu","Toukokuu","Kesäkuu","Heinäkuu","Elokuu","Syyskuu","Lokakuu","Marraskuu","Joulukuu"]
+    ret = ""
+
+    for i in (1..3)
+     if @date.month + i > 12
+       next_month = @date.month + i - 12
+      else
+        next_month = @date.month + i
+      end
+     if @date.month + i > 13
+       this_month = @date.month+(i-13)
+       next_year = 1
+     else
+       this_month = @date.month+(i-1)
+       next_year = 0
+     end
+
+      ret += "<li>#{link_to month_names[next_month] + "&nbsp;&raquo;&raquo;", :controller => 'occasions', :action => args[:view], :direction => 'forward', :year => @date.year + next_year, :month => this_month}</li>"
+   end
+   
+   return ret
   end
   
   private
@@ -180,6 +228,96 @@ module CalendarHelper
   
   def weekend?(date)
     [0, 6].include?(date.wday)
+  end
+  
+  def holiday(date)
+	if date.month == 1 && date.mday == 1
+		return " Uudenv.pv."
+	end
+	if date.month == 1 && date.mday == 6
+		return " Loppiainen"
+	end
+	if date.month == 5 && date.mday == 1
+		return " Vappu"
+	end
+	if date.month == 5 && date.mday >= 8 && date.mday <= 14 && date.wday == 0
+		return " Äitienpv."
+	end
+	if date.month == 6 && date.mday >= 19 && date.mday <= 25 && date.wday == 5
+		return " Juh. aatto"
+	end
+	if date.month == 6 && date.mday >= 20 && date.mday <= 26 && date.wday == 6
+		return " Juhannuspv."
+	end
+	if date.month == 10 && date.mday == 31 && date.wday == 6
+		return " Pyhäinpäivä"
+	end
+	if date.month == 11 && date.mday >= 1 && date.mday <= 6 && date.wday == 6
+		return " Pyhäinpäivä"
+	end
+	if date.month == 12 && date.mday == 6
+		return " Itsenäisyyspv."
+	end
+	if date.month == 12 && date.mday == 24
+		return " Jouluaatto"
+	end
+	if date.month == 12 && date.mday == 25
+		return " Joulupäivä"
+	end
+	if date.month == 12 && date.mday == 26
+		return " Tapaninpv."
+	end
+	if date.month == 12 && date.mday == 31
+		return " Uud.v.aatto"
+	end
+        
+# Calculate date of Easter and other holidays depending on it
+
+        aY = date.year
+
+        a = aY % 19;
+        b = (aY / 100).floor;
+        c = aY % 100;
+        d = (b / 4).floor;
+        e = b % 4;
+        f = ((b + 8) / 25).floor;
+        g = ((b - f + 1) / 3).floor;
+        h = (19 * a + b - d - g + 15) % 30;
+        i = (c / 4).floor;
+        k = c % 4;
+        l = (32 + 2 * e + 2 * i - h - k) % 7;
+        m = ((a + 11 * h + 22 * l) / 451).floor;
+        n = ((h + l - 7 * m + 114) / 31).floor;
+        o = (h + l - 7 * m + 114) % 31;
+
+	if date.month == n && date.mday == o + 1
+		return " Pääsiäinen"
+	end
+        eDate = Date.civil(aY, n, o + 1)
+#           return eDate.strftime()
+	if date.month == (eDate-49).month && date.mday == (eDate-49).mday
+		return " Laskiaissunn."
+	end
+	if date.month == (eDate-47).month && date.mday == (eDate-47).mday
+		return " Lask.tiistai"
+	end
+	if date.month == (eDate-2).month && date.mday == (eDate-2).mday
+		return " Pitkäperjantai"
+	end
+	if date.month == (eDate-7).month && date.mday == (eDate-7).mday
+		return " Palmusunnuntai"
+	end
+	if date.month == (eDate+1).month && date.mday == (eDate+1).mday
+		return " 2. Pääs.pv."
+	end
+	if date.month == (eDate+39).month && date.mday == (eDate+39).mday
+		return " Helatorstai"
+	end
+	if date.month == (eDate+49).month && date.mday == (eDate+49).mday
+		return " Helluntai"
+	end
+
+  return ""
   end
   
 end

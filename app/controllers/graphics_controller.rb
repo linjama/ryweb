@@ -1,8 +1,9 @@
 class GraphicsController < ApplicationController
+  filter_resource_access
   before_filter :login_required
   
   def index
-    @graphics = Graphic.find(:all, :conditions => {:parent_id => nil}, :order => 'created_at DESC')
+    @graphics = Graphic.with_permissions_to(:index).find(:all, :conditions => {:parent_id => nil}, :order => 'created_at DESC')
     respond_to do |format|
       format.html # index.rhtml
       format.xml  { render :xml => @graphics.to_xml }
@@ -13,7 +14,7 @@ class GraphicsController < ApplicationController
     @graphic = Graphic.new(params[:graphic])
     respond_to do |format|
       if @graphic.save
-        #flash[:notice] = ''
+        flash[:notice] = 'Kuva tallennettu onnistuneesti.'
         format.html { redirect_to graphics_url(:id => @graphic) }
         format.xml  { head :created, :location => graphics_url(:id => @graphic) }
         format.js
@@ -27,7 +28,7 @@ class GraphicsController < ApplicationController
 
 
   def destroy
-    @graphic = Graphic.find(params[:id])
+    @graphic = Graphic.with_permissions_to(:destroy).find(params[:id])
     @graphic.destroy
 
     respond_to do |format|
@@ -36,4 +37,26 @@ class GraphicsController < ApplicationController
       format.js
     end
   end
+
+  def edit
+    @graphic = Graphic.with_permissions_to(:edit).find(params[:id])
+  end
+
+  def update
+    @graphic = Graphic.with_permissions_to(:update).find(params[:id])
+    respond_to do |format|
+      if @graphic.update_attributes(params[:graphic])
+        flash[:notice] = 'Kuva onnistuneesti päivitetty.'
+        format.html { redirect_to graphics_url(:id => @graphic) }
+        format.xml  { head :created, :location => graphics_url(:id => @graphic) }
+        format.js
+      else
+        flash[:notice] = 'Kuvan päivitys epäonnistui.'
+        format.html { render :action => "edit" }
+        format.xml  { render :xml => @graphic.errors.to_xml }
+        format.js
+      end
+    end
+  end
+
 end

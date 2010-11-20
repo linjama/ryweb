@@ -1,5 +1,10 @@
 class Customer < ActiveRecord::Base
+  using_access_control
   has_many :users
+  belongs_to :ui_template
+
+  validates_presence_of     :name
+  validates_presence_of     :title
 
   def self.current
     Thread.current['customer']
@@ -26,6 +31,16 @@ class Customer < ActiveRecord::Base
       cust = nil
     end
     Thread.current['customer'] = cust
+  end
+
+  def getOptionsForSelectList(method)
+   case method
+     when :language
+       @options = {
+         'suomi' => 'fi',
+         'Русский' => 'ru',
+       }
+   end
   end
   
 end

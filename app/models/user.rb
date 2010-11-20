@@ -1,6 +1,8 @@
 require 'digest/sha1'
 
 class User < CustomerData
+  using_access_control
+  
   belongs_to :customer
 
   include Authentication
@@ -65,6 +67,19 @@ class User < CustomerData
          'normaali käyttäjä' => 20,
        }          
    end
+  end
+
+  def role_symbols
+    case self.user_level
+    when 20
+      [:standard]
+    when 10
+      [:admin]
+    when 1
+      [:superadmin]      
+    else
+      []
+    end
   end
 
   protected
