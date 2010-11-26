@@ -16,7 +16,6 @@ class ApplicationController < ActionController::Base
   # filter_parameter_logging :password
 
   before_filter :set_current_customer
-  helper :breadcrumbs
   
   private
 
