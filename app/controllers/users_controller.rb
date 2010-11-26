@@ -10,7 +10,7 @@ class UsersController < ApplicationController
     if current_user.superuser?
      @feedbacks = Feedback.find(:all, :order => "created_at DESC")
     else
-     @feedbacks = Feedback.find_all_by_user_id (@user.id, :order => "created_at DESC")
+     @feedbacks = Feedback.find_all_by_user_id(@user.id, :order => "created_at DESC")
     end
 
     #Näytetään etusivulla muuttuneet tapahtumat
