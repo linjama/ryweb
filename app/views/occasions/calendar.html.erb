@@ -6,7 +6,7 @@
 <div id="backforward">
   <p>
     <ul>
-      <%= navigation_back(:view => 'calendar') %><li><%= h @occasion.monthname[@date.month.to_i - 1] + 'kuu' %></li><%= navigation_forward(:view => 'calendar') %>
+      <%= navigation_back(:view => 'calendar').html_safe %><li><%= h @occasion.monthname[@date.month.to_i - 1] + 'kuu' %></li><%= navigation_forward(:view => 'calendar').html_safe %>
     </ul>
   </p>
 </div>
