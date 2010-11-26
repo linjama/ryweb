@@ -2,6 +2,7 @@ source :gemcutter
 gem "rails", "3.0.3"
 gem "sqlite3-ruby", :require => "sqlite3"
 gem "declarative_authorization"
+gem "crumble", :require => 'breadcrumb'
 
 # bundler requires these gems in all environments
 # gem "nokogiri", "1.4.2"
