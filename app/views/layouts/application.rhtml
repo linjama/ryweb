@@ -80,12 +80,13 @@
                             </ul>
 			</div>
 
-                        <% spiffy_corners :generate_css => true do %><strong>Uusia ideoita?<br />
-                          Palautetta?<br />
-                        Virhetoimintoja?<br /></strong>
-                        <br />
-                        <%= link_to "Lähetä viesti kehittäjille", new_feedback_path %>
-                        <br />
+                        <% spiffy_corners :generate_css => true do %>
+						<strong>Uusia ideoita?<br />
+                          	Palautetta?<br />
+                        	Virhetoimintoja?<br /></strong>
+                        	<br />
+                        	<%=link_to "Lähetä viesti kehittäjille", new_feedback_path %>
+                        	<br />
                         <% end %>
               <% end %>
             </div>
