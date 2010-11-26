@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-ActionController::Routing::Routes.draw do |map|
+Ryweb::Application.routes.draw do |map|
   map.resources :speakers, :path_prefix => '/:customer_key'
   map.resources :members, :path_prefix => '/:customer_key'
   map.resources :people, :path_prefix => '/:customer_key'
@@ -91,3 +91,4 @@ ActionController::Routing::Routes.draw do |map|
   # consider removing the them or commenting them out if you're using named routes and resources.
 
 end
+
