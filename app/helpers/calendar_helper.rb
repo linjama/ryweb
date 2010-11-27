@@ -66,7 +66,6 @@ module CalendarHelper
   # For consistency with the themes provided in the calendar_styles generator, use "specialDay" as the CSS class for marked days.
   #
 
-  #$month_names = ["","Tammikuu","Helmikuu","Maaliskuu","Huhtikuu","Toukokuu","Kesäkuu","Heinäkuu","Elokuu","Syyskuu","Lokakuu","Marraskuu","Joulukuu"]
   def calendar(options = {}, &block)
     raise(ArgumentError, "No year given")  unless options.has_key?(:year)
     raise(ArgumentError, "No month given") unless options.has_key?(:month)
@@ -96,8 +95,9 @@ module CalendarHelper
     last_weekday = last_day_of_week(options[:first_day_of_week])
     
 #    day_names = Date::DAYNAMES.dup
-    day_names = ["Sunnuntai","Maanantai","Tiistai","Keskiviikko","Torstai","Perjantai","Lauantai"]
-    month_names = ["","Tammikuu","Helmikuu","Maaliskuu","Huhtikuu","Toukokuu","Kesäkuu","Heinäkuu","Elokuu","Syyskuu","Lokakuu","Marraskuu","Joulukuu"]
+    day_names = I18n.t "date.day_names"
+    month_names = I18n.t "date.month_names"
+
     first_weekday.times do
       day_names.push(day_names.shift)
     end
@@ -154,7 +154,7 @@ module CalendarHelper
   end
 
   def navigation_back(args)
-     month_names = ["","Tammikuu","Helmikuu","Maaliskuu","Huhtikuu","Toukokuu","Kesäkuu","Heinäkuu","Elokuu","Syyskuu","Lokakuu","Marraskuu","Joulukuu"]
+    month_names = I18n.t "date.month_names"
     ret = ""
     3.downto(1) { |i|
       if @date.month - i < 1
@@ -177,7 +177,7 @@ module CalendarHelper
   end
 
   def navigation_forward(args)
-    month_names = ["","Tammikuu","Helmikuu","Maaliskuu","Huhtikuu","Toukokuu","Kesäkuu","Heinäkuu","Elokuu","Syyskuu","Lokakuu","Marraskuu","Joulukuu"]
+    month_names = I18n.t "date.month_names"
     ret = ""
 
     for i in (1..3)
