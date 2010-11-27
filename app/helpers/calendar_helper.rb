@@ -170,10 +170,10 @@ module CalendarHelper
         this_month = @date.month-(i-1)
         previous_year = 0
       end
-      ret += "<li>#{link_to "&laquo;&laquo;&nbsp;" + month_names[previous_month], :controller => 'occasions', :action => args[:view], :direction => 'back', :year => @date.year+previous_year, :month => this_month}</li>"
+      ret += "<li>#{link_to " ««" + month_names[previous_month], :controller => 'occasions', :action => args[:view], :direction => 'back', :year => @date.year+previous_year, :month => this_month}</li>"
 
     }
-  return ret
+  return ret.html_safe
   end
 
   def navigation_forward(args)
@@ -194,10 +194,10 @@ module CalendarHelper
        next_year = 0
      end
 
-      ret += "<li>#{link_to month_names[next_month] + "&nbsp;&raquo;&raquo;", :controller => 'occasions', :action => args[:view], :direction => 'forward', :year => @date.year + next_year, :month => this_month}</li>"
+      ret += "<li>#{link_to month_names[next_month] + " »»", :controller => 'occasions', :action => args[:view], :direction => 'forward', :year => @date.year + next_year, :month => this_month}</li>"
    end
    
-   return ret
+   return ret.html_safe
   end
   
   private
