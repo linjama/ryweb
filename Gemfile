@@ -3,7 +3,6 @@ gem "rails", "3.0.3"
 gem "sqlite3-ruby", :require => "sqlite3"
 gem "declarative_authorization"
 gem "crumble", :require => 'breadcrumb'
-gem 'calendar_helper'
 
 # bundler requires these gems in all environments
 # gem "nokogiri", "1.4.2"
