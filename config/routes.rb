@@ -1,10 +1,15 @@
 # -*- coding: utf-8 -*-
+
 Ryweb::Application.routes.draw do |map|
   map.resources :speakers, :path_prefix => '/:customer_key'
   map.resources :members, :path_prefix => '/:customer_key'
   map.resources :people, :path_prefix => '/:customer_key'
   map.resources :ui_templates, :path_prefix => '/:customer_key'
   map.resources :configurations, :path_prefix => '/:customer_key'
+
+  map.resources :messages, :path_prefix => '/:customer_key'
+  map.resources :bookings, :path_prefix => '/:customer_key'
+  map.resources :rooms, :path_prefix => '/:customer_key'
 
   map.resources :index
   map.connect '/index/:action/:id', :controller => 'index'
@@ -91,4 +96,3 @@ Ryweb::Application.routes.draw do |map|
   # consider removing the them or commenting them out if you're using named routes and resources.
 
 end
-
