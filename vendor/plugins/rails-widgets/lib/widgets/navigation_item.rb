@@ -3,7 +3,7 @@ module Widgets
     include Highlightable
     include Disableable
     
-    attr_accessor :name, :link, :html, :function
+    attr_accessor :name, :link, :html, :li_html, :function
     
     def initialize(opts={})
       @name = opts[:name] 
@@ -11,7 +11,8 @@ module Widgets
       @html = opts[:html] || {} 
       @function = opts[:function] || {}
       @html[:title] = opts[:title] 
-      @html[:target] = opts[:target]      
+      @html[:target] = opts[:target]
+      @li_html = opts[:li_html] || {}
      
       yield(self) if block_given?
       
