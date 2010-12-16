@@ -43,7 +43,6 @@ module Widgets
       link_to name, 'javascript:void(0)', :id => "tooltip_link_#{id}"
     end
     
-<<<<<<< HEAD
     def tooltip_link_function(id)
       "$('tooltip_link_#{id}').observe('click', function(event){toggleTooltip(event, $('tooltip_#{id}'))});".html_safe
     end
@@ -60,33 +59,6 @@ module Widgets
       html << '<small>'.html_safe + close_tooltip_link(opts[:id], opts[:close_message]) + '</small>'.html_safe     
       html << '</div></div>'.html_safe 
       html.html_safe
-=======
-
-#    def tooltip_link_function(id)
-#      "$('tooltip_link_#{id}').observe('click', function(event){toggleTooltip(event, $('tooltip_#{id}'))});"
-#    end
-
-  def tooltip_link_function(id)
-      "$('tooltip_link_#{id}').observe('mouseover', function(event){showTooltip(event, $('tooltip_#{id}'))});" +
-      "$('tooltip_link_#{id}').observe('mouseout', function(event){hideTooltip(event, $('tooltip_#{id}'))});" 
-   end
- 
-    def close_tooltip_link(id, message = 'close')
-      message ||= 'close' # if nil is passed I'll force it
-      link_to_function message, "$('tooltip_#{id}').hide()"
-    end
-    
-    def render_tooltip(name, content, opts)
-      html = tag('div', {:id => "tooltip_#{opts[:id]}", :class=>'tooltip', :style => 'display:none'}, true)
-      html << tag('div', {:id => "tooltip_content_#{opts[:id]}", :class=>'tooltip_content'},true)
-      html << content
-
-      if opts[:close_link] == true
-	      html << '<small>' + close_tooltip_link(opts[:id], opts[:close_message]) + '</small>'     
-	    end
-      html << '</div></div>' 
-      html
->>>>>>> TSY_local
     end
   end
 end
