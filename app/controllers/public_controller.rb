@@ -56,7 +56,7 @@ class PublicController < ApplicationController
 
       @occasions = Occasion.find(:all, :joins => :occasion_type, :conditions => ["start_time >= ? AND start_time < ? AND state = ? AND occasion_types.visibility = ? ", DateTime.now.beginning_of_day, last_date, 20,20], :order => 'start_time ')
 
-<<<<<<< HEAD
+
       if @page.parameter_calendar_type == 'kk'
         @occasion_months = @occasions.group_by { |o| o.start_time.beginning_of_month }
       elsif @page.parameter_calendar_type == 'vk'
@@ -64,8 +64,6 @@ class PublicController < ApplicationController
       elsif @page.parameter_calendar_type == 'pk'
         @occasion_locations = @occasions.group_by { |l| l.location.name }
       end
-=======
->>>>>>> TSY_local
     end
 
     # Database access only if page contains calendar gadgets
