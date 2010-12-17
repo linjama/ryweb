@@ -5,14 +5,12 @@
   <%= f.error_messages %>
    
   <p>
-    <%  d=Date.today+(7-Date.today.strftime("%w").to_i); y=d.year; m=d.month; paiva=d.day %>
     <%= f.label :alkamisaika %>    
-	<%= f.datetime_select :start_time,
+	  <%= f.datetime_select :start_time,
         :order => [:day, :month, :year], 
         :start_year => Date.today.year,
         :end_year => (Date.today.year+2),
-        :use_month_names => %w[tammi helmi maalis huhti touko kes&auml; hein&auml; elo syys loka marras joulu].map{|x| x+"kuu"},             
-        :default => DateTime.new(y,m,paiva,16,0),
+        :default => @booking.default_booking_time,
         :minute_step => 30 
     %>
   </p>
@@ -23,8 +21,7 @@
         :order => [:day, :month, :year], 
         :start_year => Date.today.year,
         :end_year => (Date.today.year+2),
-        :use_month_names => %w[tammi helmi maalis huhti touko kes&auml; hein&auml; elo syys loka marras joulu].map{|x| x+"kuu"},         
-        :default => DateTime.new(y,m,paiva,19,0) ,
+        :default => @booking.default_booking_time.advance(:hours => 3),
         :minute_step => 30 
     %>
   </p>

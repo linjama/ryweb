@@ -20,11 +20,8 @@
 
 <% @bookings.each do |booking| %>
   <tr>
-    <% a=%w[su ma ti ke to pe la] %>
-    <% j=booking.start_time.strftime('%w').to_i %>
-    <td>
-<%= booking.varaamaton? %>
-<%=h booking.start_time.strftime(" %d.%m.%Y %H:%M ")+a[j] %></td>
+    <td> <%=h booking.abbr_day_name(booking.start_time) + 
+      booking.start_time.strftime(" %d.%m.%Y %H:%M ") %></td>
     <td><%=h booking.week %></td>
     <% aika=(booking.end_time-booking.start_time)/60/60 %>
     <td><%=h sprintf('%.1f', aika) %></td>
