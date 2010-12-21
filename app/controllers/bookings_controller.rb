@@ -55,20 +55,20 @@ class BookingsController < ApplicationController
 				
 
     respond_to do |format|
-			if @booking.varaamaton?
-		    if @booking.save
-		      flash[:notice] = 'Uusi tilanvaraus lisätty.'
-		      format.html { redirect_to(booking_url(:id => @booking)) }
-		      format.xml  { render :xml => @booking, :status => :created, :booking => @booking }
-		    else
-		      format.html { render :action => "new" }
-		      format.xml  { render :xml => @booking.errors, :status => :unprocessable_entity }
-		    end
-			else
-				flash[:notice] = 'Ei voida tallentaa, tila käytössä!'
-		    format.html { render :action => "new" }
-		    format.xml  { render :xml => @booking.errors, :status => :unprocessable_entity }
-			end
+#      if @booking.varaamaton?
+	if @booking.save
+	  flash[:notice] = 'Uusi tilanvaraus lisätty.'
+	  format.html { redirect_to(booking_url(:id => @booking)) }
+	  format.xml  { render :xml => @booking, :status => :created, :booking => @booking }
+	else
+	  format.html { render :action => "new" }
+	  format.xml  { render :xml => @booking.errors, :status => :unprocessable_entity }
+	end
+#      else
+#       flash[:notice] = 'Ei voida tallentaa, tila käytössä!'
+#	format.html { render :action => "new" }
+#	format.xml  { render :xml => @booking.errors, :status => :unprocessable_entity }
+#      end
     end
   end
 
@@ -76,22 +76,21 @@ class BookingsController < ApplicationController
   # PUT /bookings/1.xml
   def update
     @booking = Booking.find(params[:id])
-	 
     respond_to do |format|
-			if @booking.varaamaton?
-		    if @booking.update_attributes(params[:booking])
-		      flash[:notice] = 'Tilanvarausta päivitetty.'
-		      format.html { redirect_to(booking_url) }
-		      format.xml  { head :ok }
-		    else
-		      format.html { render :action => "edit" }
-		      format.xml  { render :xml => @booking.errors, :status => :unprocessable_entity }
-		    end
-			else
-					flash[:notice] = 'Ei voida tallentaa, tila käytössä!'
-		      format.html { render :action => "edit" }
-		      format.xml  { render :xml => @booking.errors, :status => :unprocessable_entity }
-			end
+#      if @booking.varaamaton?
+        if @booking.update_attributes(params[:booking])
+          flash[:notice] = 'Tilanvarausta päivitetty.'
+          format.html { redirect_to(booking_url) }
+          format.xml  { head :ok }
+        else
+          format.html { render :action => "edit" }
+          format.xml  { render :xml => @booking.errors, :status => :unprocessable_entity }
+        end
+#      else
+#        flash[:notice] = 'Ei voida tallentaa, tila käytössä!'
+#        format.html { render :action => "edit" }
+#        format.xml  { render :xml => @booking.errors, :status => :unprocessable_entity }
+#      end
     end
   end
 
