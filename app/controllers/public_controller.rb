@@ -1,9 +1,6 @@
 class PublicController < ApplicationController
   layout 'public'
 
-  require 'rss/2.0'
-  require 'open-uri'
-
   before_filter :set_layout
   before_filter :generate_menu
   before_filter :set_locale
@@ -44,12 +41,21 @@ class PublicController < ApplicationController
     last_date = date_now.advance(:months => calendar_length)
     last_date = last_date.beginning_of_month # first day of next month at 0:00:00
     
+
     # Database access only if page contains a calendar
     if @page.page_type == 2
+
+      date_now = DateTime.now
+      first_date = date_now.beginning_of_month # first day at 0:00:00
+      last_date = date_now.advance(:months => calendar_length)
+      last_date = last_date.beginning_of_month # first day of next month at 0:00:00
+	@messages = Message.find(:all, :conditions => ["public = 't' AND valid_from < ? AND valid_until > ?", Time.now, Time.now], :order => "valid_from DESC")
+
 
       @modified_occasions = Occasion.find(:all, :joins => :occasion_type, :conditions => ["start_time >= ? AND start_time < ? AND (state = ? OR state =?) AND occasion_types.visibility = ? AND inform_changes = ? ", Time.now.beginning_of_day, last_date, 20,30, 20, true], :order => 'start_time ')
 
       @occasions = Occasion.find(:all, :joins => :occasion_type, :conditions => ["start_time >= ? AND start_time < ? AND state = ? AND occasion_types.visibility = ? ", DateTime.now.beginning_of_day, last_date, 20,20], :order => 'start_time ')
+
 
       if @page.parameter_calendar_type == 'kk'
         @occasion_months = @occasions.group_by { |o| o.start_time.beginning_of_month }

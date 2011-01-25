@@ -1,0 +1,43 @@
+
+<p>
+  <b>varaus alkaa:</b>
+  <% a=%w[su ma ti ke to pe la] %>
+  <% j=@booking.start_time.strftime('%w').to_i %>   
+  <%=h a[j]+@booking.start_time.strftime(" %d.%m.%Y %H:%M ") %>
+</p>
+ 
+<p>
+  <b>varaus p&auml;&auml;ttyy:</b>
+  <% a=%w[su ma ti ke to pe la] %>
+  <% j=@booking.end_time.strftime('%w').to_i %>  
+  <%=h a[j]+@booking.end_time.strftime(" %d.%m.%Y %H:%M ") %>
+</p>
+
+
+<p>
+  <b>viikko:</b>
+  <%=h @booking.week %>
+</p>
+
+
+<p>
+  <b>varaaja:</b>
+  <%=h @booking.reserver %>
+</p>
+
+
+<p>
+  <b>puhelin:</b>
+  <%=h @booking.telephone %>
+</p>
+
+
+<p>
+  <b>kuvaus tilavarauksista:</b>
+  <%=h @booking.description %>
+</p>
+
+
+
+<%= link_to 'Muokkaa tilanvarausta', edit_booking_path(:id => @booking) %> |
+<%= link_to 'Takaisin varauslistaan', bookings_path(:id => @booking) %>

@@ -5,4 +5,5 @@ db/schema.rb
 .DS_Store
 doc/api
 doc/app
-
+Gemfile.lock
+*.orig

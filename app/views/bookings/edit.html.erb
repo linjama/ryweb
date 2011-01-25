@@ -1,0 +1,54 @@
+<div class="table-header"><div class="table-header r"><div class="table-header m"><h2>Tilavarauksen muokkaaminen</h2></div></div></div>
+<div class="border">
+<% form_for :booking,
+   :url => booking_path(:id => @booking),
+   :html => {:method => :put }  do |f| -%>
+   
+   <%= f.error_messages %>
+  <p>
+    <%= f.label :alkamisaika %>
+    <%= f.datetime_select :start_time, 
+        :order => [:day, :month, :year], 
+        :start_year => Date.today.year,
+        :end_year => (Date.today.year+2),
+        :minute_step => 30 
+    %>
+  </p>
+
+  <p>
+    <%= f.label :loppumisaika %>
+    <%= f.datetime_select :end_time,
+        :order => [:day, :month, :year], 
+        :start_year => Date.today.year,
+        :end_year => (Date.today.year+2),
+        :minute_step => 30 
+    %>
+  </p>
+ 
+	<p>
+    <%= f.label :tilat %><br />
+    <% status = ["varattu", "peruttu"] %>             
+    <ul>
+      <% for room in Room.find(:all) %>
+        <li><%= check_box_tag "booking[room_ids][]",room.id,@booking.rooms.include?(room)-%> <%= room.name -%> (<%= room.description -%>)</li>
+      <% end %>
+    </ul>
+  </p>
+
+  <p>
+    <%= f.label :varaaja %>
+    <%= f.text_field :reserver %>
+  </p>
+
+  <p>
+    <%= f.label :puhelin %>
+    <%= f.text_field :telephone %>
+  </p>
+
+  <p>
+    <%= f.submit 'Muutan varaustiedoja' %>
+  </p>
+<% end %>
+ 
+</div>
+ 
