@@ -43,7 +43,7 @@ module ApplicationHelper
  
   private
   
-  # Subfunction for calculating week number. Does not work correcty near New Year
+  # Subfunction for calculating week number. Does not work correcty near the New Year
   def tmp_week_number(date)
     weekday = date.wday
     weekday +=7 if weekday == 0   	# Sunday shift
