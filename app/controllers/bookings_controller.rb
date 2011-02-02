@@ -4,9 +4,9 @@ class BookingsController < ApplicationController
   # GET /bookings
   # GET /bookings.xml
   def index
-    @bookings = Booking.find(:all, :conditions => ['end_time > ?', Time.now])
-		
-		respond_to do |format|
+    @bookings=Booking.find(:all,:conditions => ['start_time > ?',Time.now]).sort{|a,b| a.start_time<=>b.start_time}		
+
+    respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @bookings }
     end
@@ -15,8 +15,7 @@ class BookingsController < ApplicationController
   # GET /bookings/1
   # GET /bookings/1.xml
   def show
-    @booking = Booking.find(params[:id])
-
+    @bookings=Booking.find(:all,:conditions => ['start_time > ?',Time.now])  	
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @booking }
@@ -42,9 +41,8 @@ class BookingsController < ApplicationController
   # POST /bookings
   # POST /bookings.xml
   def create
-    @booking = Booking.new(params[:booking])
-    
-	@booking.week = @booking.start_time.strftime("%W").to_i
+    @booking = Booking.new(params[:booking])    
+    @booking.week = @booking.start_time.strftime("%W").to_i
     
 # TODO: Suomalainen viikko menee eri tavalla kuin yllä laskettu amerikkalainen viikko
 # tämä hoidetaan erillisellä funktiolla

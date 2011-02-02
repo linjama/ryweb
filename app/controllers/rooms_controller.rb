@@ -2,8 +2,7 @@ class RoomsController < ApplicationController
   # GET /rooms
   # GET /rooms.xml
   def index
-    @rooms = Room.all
-
+    @rooms = Room.find(:all).sort{|a,b| a.name.upcase <=> b.name.upcase}	 
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @rooms }
@@ -65,7 +64,7 @@ class RoomsController < ApplicationController
         format.html { redirect_to(rooms_url) }
         format.xml  { head :ok }
       else
-				flash[:notice] = 'Tilaa ei voitu muokata.'
+        flash[:notice] = 'Tilaa ei voitu muokata.'
         format.html { render :action => "edit" }
         format.xml  { render :xml => @room.errors, :status => :unprocessable_entity }
       end
