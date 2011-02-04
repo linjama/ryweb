@@ -1,15 +1,11 @@
 <%= f.error_messages %>
-	
+
 <p><%= label_tag 'start_time', 'Aloitusaika' %>
 <%= datetime_select 'occasion', 'start_time', :use_month_numbers => true, :order => [:day,:month,:year],:default => Time.now.at_beginning_of_day + 8.hours, :minute_step => 5, :start_hour => 10 %>
 
 <p><%= label_tag 'duration', 'Kesto' %>
 <%= select_hour(3) %> : <%= select_minute(0, :minute_step => 15)%>
 </p>
-
-<p><%= label_tag 'repeat', 'Toisto' %>
-  <%= f.select :repeat, @occasion.getOptionsForSelectList(:repeat), options ={:prompt => ""} %>
-  <%= date_select 'occasion', 'repeat_until', :use_month_numbers => true, :order => [:day,:month,:year], :default => @occasion.start_time %> asti</p>
 
 <p><%= label_tag 'occasion_type_id', 'Tapahtuman tyyppi' %>
 <p><%= text_field_with_auto_complete 'occasion', 'occasion_type_id', :value => @occasion.occasion_type.name %></p>
@@ -20,8 +16,15 @@
 <p><%= label_tag 'subject', 'Aihe' %>
 <p><%= text_field_with_auto_complete 'occasion', 'subject', :value => @occasion.subject %></p>
 
+<p><%= label_tag 'region', 'Alue' %>
+<p><%= text_field_with_auto_complete 'occasion', 'region', :value => @occasion.region %></p>
+
 <p><%= label_tag 'location_id', 'Paikka' %>
 <p><%= text_field_with_auto_complete 'occasion', 'location_id', :value => @occasion.location.name %></p>
+
+<p><%= label_tag 'repeat', 'Toisto' %>
+  <%= f.select :repeat, @occasion.getOptionsForSelectList(:repeat), options ={:prompt => ""} %>
+  <%= date_select 'occasion', 'repeat_until', :use_month_numbers => true, :order => [:day,:month,:year], :default => @occasion.start_time %> asti</p>
 
 <% if !Customer.current.radio_url.nil? %>
   <p><%= label_tag 'net_radio', 'Nettiradiolähetys' %>
