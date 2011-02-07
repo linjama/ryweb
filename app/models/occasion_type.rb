@@ -1,9 +1,32 @@
 class OccasionType < CustomerData
-    using_access_control
-    has_many :occasions
+  using_access_control
+  has_many :occasions
     
   validates_presence_of     :name
   validates_presence_of     :visibility
+  
+  @@standard_types = ["Aikuistenkerhot",
+                      "Juhlat",
+                      "Julkaisutilaisuus",
+                      "Kodinilta",
+                      "Kokous",
+                      "Kristillisyyden työn koulutustilaisuus",
+                      "Lauluilta",
+                      "Leirityötilaisuus",
+                      "Lähetysseurat Ry",
+                      "Lähetysseurat SRK",
+                      "Lähetystoimikunta",
+                      "Muu varaus (häät jne.)",
+                      "Nuortenilta/nuorisopäivät",
+                      "Opistotyötilaisuus",
+                      "Pyhäkoulu",
+                      "Päiväkerho",
+                      "Raamattuluokka",
+                      "Retki/leiri",
+                      "Seurakuntapäivät/ilta",
+                      "Seurat",
+                      "Varainhankintatapahtuma",
+                      "Vierailevat myyjäiset"].sort
   
   def getOptionsForSelectList(method)
    case method
