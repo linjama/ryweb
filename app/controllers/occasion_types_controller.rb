@@ -1,11 +1,28 @@
 class OccasionTypesController < ApplicationController
-   filter_resource_access
+
+   # Accoring to in_controller.rb (declarative_authorization module), 
+   # all before filters must be before filter_resource_access and friends
    before_filter :login_required
+   filter_resource_access :additional_new => :create_standard_occasions
+
+  # Destroy existing occasion types and runs in standard types
+  def create_standard_occasions
+    OccasionType.with_permissions_to(:destroy).destroy_all
+    
+    OccasionType::STANDARD_TYPES.each do |standard_type|
+      standard_occasion_type = OccasionType.new(:name => standard_type)
+      if !standard_occasion_type.save
+        format.html { render :action => "index" }
+        format.xml  { render :xml => standard_occasion_type.errors, :status => :unprocessable_entity }
+      end
+    end
+    @occasion_types = OccasionType.with_permissions_to(:index).find(:all)
+  end
   
   # GET /occasion_types
   # GET /occasion_types.xml
   def index
-    @occasion_types = OccasionType.with_permissions_to(:index).find(:all, :order => "name ASC")
+    @occasion_types = OccasionType.with_permissions_to(:index).find(:all)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -13,67 +30,24 @@ class OccasionTypesController < ApplicationController
     end
   end
 
-  # GET /occasion_types/1
-  # GET /occasion_types/1.xml
-  def show
-    @occasion_type = OccasionType.with_permissions_to(:show).find(params[:id])
 
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @occasion_type }
-    end
-  end
-
-  # GET /occasion_types/new
-  # GET /occasion_types/new.xml
-  def new
-    @occasion_type = OccasionType.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @occasion_type }
-    end
-  end
-
-  # GET /occasion_types/1/edit
-  def edit
-    @occasion_type = OccasionType.with_permissions_to(:edit).find(params[:id])
-  end
-
-  # POST /occasion_types
-  # POST /occasion_types.xml
-  def create
-    @occasion_type = OccasionType.new(params[:occasion_type])
-
-    respond_to do |format|
-      if @occasion_type.save
-
-        flash[:notice] = 'Uusi tapahtumatyyppi lisätty.'
-        format.html { redirect_to(occasion_type_url(:id => @occasion_type)) }        
-        format.xml  { render :xml => @occasion_type, :status => :created, :location => @occasion_type }
-      else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @occasion_type.errors, :status => :unprocessable_entity }
-      end
-    end
-  end
 
   # PUT /occasion_types/1
   # PUT /occasion_types/1.xml
-  def update
-    @occasion_type = OccasionType.with_permissions_to(:update).find(params[:id])
+#  def update
+#    @occasion_type = OccasionType.with_permissions_to(:update).find(params[:id])
 
-    respond_to do |format|
-      if @occasion_type.update_attributes(params[:occasion_type])
-        flash[:notice] = 'Tapahtumatyyppin tiedot päivitetty.'
-        format.html { redirect_to(occasion_type_url) }     
-        format.xml  { head :ok }
-      else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @occasion_type.errors, :status => :unprocessable_entity }
-      end
-    end
-  end
+#    respond_to do |format|
+#      if @occasion_type.update_attributes(params[:occasion_type])
+#        flash[:notice] = 'Tapahtumatyyppin tiedot päivitetty.'
+#        format.html { redirect_to(occasion_type_url) }     
+#        format.xml  { head :ok }
+#      else
+#        format.html { render :action => "edit" }
+#        format.xml  { render :xml => @occasion_type.errors, :status => :unprocessable_entity }
+#      end
+#    end
+#  end
 
   # DELETE /occasion_types/1
   # DELETE /occasion_types/1.xml

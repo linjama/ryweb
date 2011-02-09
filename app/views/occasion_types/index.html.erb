@@ -1,27 +1,27 @@
 <div class="table-header"><div class="table-header r"><div class="table-header m"><h2>Tapahtumatyypit</h2></div></div></div>
 <div class="border">
 <div id="buttonbar">
-	<%= link_to 'Uusi tapahtumatyyppi', new_occasion_type_path, :class => 'button icon_add' if permitted_to? :manage, :occasion_types %>
+	<%= button_to ("Alusta tapahtumat", {:action => 'create_standard_occasions'}) if permitted_to? :manage, :occasion_types %>
 </div>
+
 <%= crumbs %>
   
 <table style="width: 95%;">
   <thead>
   	<tr>
 		<th>Tyyppi</th>
-		<th>Näkyvyys</th>
+		<th>Julkinen?</th>
 		<th>&nbsp;</th>
 	</tr>
   </thead>
 
 <tbody>
-<% for occasion_type in @occasion_types %>
-  <tr class="<%= cycle("even", "odd") %>">
-	<td><%= link_to occasion_type.name, occasion_type_path(:id => occasion_type) %></td>
-	<td><%= occasion_type.getOptionsForSelectList(:visibility).index(occasion_type.visibility) %></td>
-    <td><%= link_to 'Muokkaa', edit_occasion_type_path(:id => occasion_type), :class => 'icon icon_edit' if permitted_to? :manage, :occasion_types %>
-    <%= link_to 'Poista', occasion_type_path(:id => occasion_type), :class => 'icon icon_delete', :confirm => 'Oletko varma?', :method => :delete if permitted_to? :manage, :occasion_types %></td>
-  </tr>
+<% @occasion_types.each do |occasion_type| %>
+  <tr class="<%= cycle('even', 'odd') %>">
+    <td><%= occasion_type.name %></td>
+    <% hidden_field("occasion_type", "name")%>
+   <td><%= check_box("occasion_type","visibility",{},"private","public")%></td>
+ </tr>
 <% end %>
 </tbody>
 </table>
