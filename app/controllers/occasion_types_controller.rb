@@ -3,20 +3,19 @@ class OccasionTypesController < ApplicationController
    # Accoring to in_controller.rb (declarative_authorization module), 
    # all before filters must be before filter_resource_access and friends
    before_filter :login_required
-   filter_resource_access :additional_new => :create_standard_occasions
+   filter_resource_access
 
   # Destroy existing occasion types and runs in standard types
-  def create_standard_occasions
+  def create
     OccasionType.with_permissions_to(:destroy).destroy_all
     
     OccasionType::STANDARD_TYPES.each do |standard_type|
-      standard_occasion_type = OccasionType.new(:name => standard_type)
-      if !standard_occasion_type.save
-        format.html { render :action => "index" }
-        format.xml  { render :xml => standard_occasion_type.errors, :status => :unprocessable_entity }
-      end
+      occasion_type = OccasionType.new(:name => standard_type)
+      occasion_type.save!
     end
+
     @occasion_types = OccasionType.with_permissions_to(:index).find(:all)
+    redirect_to(:action => 'index')
   end
   
   # GET /occasion_types
@@ -29,8 +28,6 @@ class OccasionTypesController < ApplicationController
       format.xml  { render :xml => @occasion_types }
     end
   end
-
-
 
   # PUT /occasion_types/1
   # PUT /occasion_types/1.xml

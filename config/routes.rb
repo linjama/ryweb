@@ -27,7 +27,6 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :users, :path_prefix => '/:customer_key'
   map.resource :session, :path_prefix => '/:customer_key'
   map.resources :occasion_types, :path_prefix => '/:customer_key'
-  map.standard_occasions '/:customer_key/occasion_types/standard_occasions', :controller => 'occasion_types', :action => 'create_standard_occasions'
   map.occasioncalendar '/:customer_key/occasions/calendar', :controller =>'occasions', :action =>'calendar'
   map.occasionlist '/:customer_key/occasions/list', :controller =>'occasions', :action =>'list'
   map.resources :occasions, :path_prefix => '/:customer_key'

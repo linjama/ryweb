@@ -1,7 +1,7 @@
 <div class="table-header"><div class="table-header r"><div class="table-header m"><h2>Tapahtumatyypit</h2></div></div></div>
 <div class="border">
 <div id="buttonbar">
-	<%= button_to ("Alusta tapahtumat", {:action => 'create_standard_occasions'}) if permitted_to? :manage, :occasion_types %>
+	<%= button_to ("Alusta tapahtumat", {:action => 'create'}) if permitted_to? :manage, :occasion_types %>
 </div>
 
 <%= crumbs %>
