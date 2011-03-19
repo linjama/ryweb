@@ -5,4 +5,4 @@ db/schema.rb
 .DS_Store
 doc/api
 doc/app
-
+*.orig

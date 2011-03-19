@@ -26,7 +26,11 @@ ActionController::Routing::Routes.draw do |map|
   map.signup '/:customer_key/signup', :controller => 'users', :action => 'new'
   map.resources :users, :path_prefix => '/:customer_key'
   map.resource :session, :path_prefix => '/:customer_key'
-  map.resources :occasion_types, :path_prefix => '/:customer_key'
+#  map.resources :occasion_types, :path_prefix => '/:customer_key'
+  map.occasiontypes '/:customer_key/occasion_types', :conditions => {:method => :get}, :controller => "occasion_types", :action => "index"
+  map.occasiontypes '/:customer_key/occasion_types', :conditions => {:method => :post}, :controller => "occasion_types", :action => "create"
+  map.occasiontypes '/:customer_key/occasion_types', :conditions => {:method => :put}, :controller => "occasion_types", :action => "update"
+#  map.occasiontypes '/:customer_key/occasion_types', :conditions => {:method => :delete}, :controller => "occasion_types", :action => "destroy"
   map.occasioncalendar '/:customer_key/occasions/calendar', :controller =>'occasions', :action =>'calendar'
   map.occasionlist '/:customer_key/occasions/list', :controller =>'occasions', :action =>'list'
   map.resources :occasions, :path_prefix => '/:customer_key'

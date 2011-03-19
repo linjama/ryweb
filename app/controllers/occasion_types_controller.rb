@@ -10,8 +10,8 @@ class OccasionTypesController < ApplicationController
     OccasionType.with_permissions_to(:destroy).destroy_all
     
     OccasionType::STANDARD_TYPES.each do |standard_type|
-      occasion_type = OccasionType.new(:name => standard_type)
-      occasion_type.save!
+      occasion_type = OccasionType.new(:name => standard_type, :visibility => 0)
+      occasion_type.save!  # Raises exception if save fails.
     end
 
     @occasion_types = OccasionType.with_permissions_to(:index).find(:all)
@@ -29,10 +29,23 @@ class OccasionTypesController < ApplicationController
     end
   end
 
-  # PUT /occasion_types/1
-  # PUT /occasion_types/1.xml
-#  def update
-#    @occasion_type = OccasionType.with_permissions_to(:update).find(params[:id])
+  # PUT /occasion_types
+  # PUT /occasion_types.xml
+  def update
+    @occasion_types = OccasionType.with_permissions_to(:update).find(:all)
+    visibility_ids = params[:visibility].collect {|id| id.to_i} if params[:visibility]
+    visibility_ids = [nil] unless visibility_ids  # visibility_ids must be array
+    
+    @occasion_types.each do |occasion_type|
+      if visibility_ids.include?occasion_type.id
+        occasion_type.visibility = 20  # public
+      else
+        occasion_type.visibility = 10  # intranet
+      end
+      occasion_type.save!
+    end
+  
+    redirect_to(:action => 'index')
 
 #    respond_to do |format|
 #      if @occasion_type.update_attributes(params[:occasion_type])
@@ -44,7 +57,7 @@ class OccasionTypesController < ApplicationController
 #        format.xml  { render :xml => @occasion_type.errors, :status => :unprocessable_entity }
 #      end
 #    end
-#  end
+  end
 
   # DELETE /occasion_types/1
   # DELETE /occasion_types/1.xml

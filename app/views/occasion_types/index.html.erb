@@ -5,26 +5,32 @@
 </div>
 
 <%= crumbs %>
+
+<div>Matti <%= debug @occasion_types %></div>
   
 <table style="width: 95%;">
   <thead>
   	<tr>
 		<th>Tyyppi</th>
 		<th>Julkinen?</th>
-		<th>&nbsp;</th>
+		<th>Piilotettu?</th>
 	</tr>
   </thead>
 
 <tbody>
-<% @occasion_types.each do |occasion_type| %>
-  <tr class="<%= cycle('even', 'odd') %>">
-    <td><%= occasion_type.name %></td>
-    <% hidden_field("occasion_type", "name")%>
-   <td><%= check_box("occasion_type","visibility",{},"private","public")%></td>
- </tr>
+<% form_tag do %>
+  <% @occasion_types.each do |occasion_type| %>
+    <tr class="<%= cycle('even', 'odd') %>">
+      <td><%= occasion_type.name %></td>
+      <td><%= check_box_tag("visibility[]",occasion_type.id,occasion_type.public_visible?) %></td>
+      <td><%= check_box_tag("notshown[]",occasion_type.id) %></td>
+    </tr>
+  <% end %> 
+  </tbody>
+  </table>
+  <%= button_to("Tallenna", {:action => "update"}, {:method => :put}) %> 
 <% end %>
-</tbody>
-</table>
+
 
 <br />
 </div>
